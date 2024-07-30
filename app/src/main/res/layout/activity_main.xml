@@ -5,15 +5,66 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/surface"
+    android:padding="10dp">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/searching_tab_btn"
+
+        android:layout_marginBottom="10dp"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/searching_tab_btn"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/archive_tab_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:layout_marginEnd="7dp"
+
+
+        android:text="@string/searching_tab_name"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/on_primary"
+        android:gravity="center"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp"
+
+        android:background="@drawable/primary_btn"
+        />
+
+    <TextView
+        android:id="@+id/archive_tab_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/searching_tab_btn"
+        app:layout_constraintBottom_toBottomOf="@id/searching_tab_btn"
+
+        android:layout_marginStart="7dp"
+
+        android:text="@string/archive_tab_name"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/on_primary"
+        android:gravity="center"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp"
+
+        android:background="@drawable/primary_btn"
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
