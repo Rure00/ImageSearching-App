@@ -1,8 +1,5 @@
 package com.project.imagesearchingapp.model.api
 
-import android.content.Context
-import android.graphics.BitmapFactory
-import com.project.imagesearchingapp.R
 import com.project.imagesearchingapp.data.ImageData
 
 
@@ -17,6 +14,4 @@ class RetrofitController {
                 time = it.datetime
             )
         }
-
-
 }
