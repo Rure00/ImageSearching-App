@@ -73,4 +73,6 @@ dependencies {
     implementation(libs.converter.gson)
 
     testImplementation(libs.kotlinx.coroutines.test)
+
+    implementation(libs.glide)
 }

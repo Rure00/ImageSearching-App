@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.bumptech.glide.Glide
 import com.project.imagesearchingapp.R
 import com.project.imagesearchingapp.data.ImageData
 import com.project.imagesearchingapp.databinding.FragmentSearchingBinding
@@ -37,13 +38,6 @@ class SearchingFragment : Fragment() {
 
         )
     private val imageRvAdapter = ImageRvAdapter(imageList)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        //imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "Daum카페", "2024-01-21 22:50:57"))
-        //imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "네이퍼카페", "2024-01-22 22:50:57"))
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,9 +92,11 @@ class SearchingFragment : Fragment() {
         }
     }
 
+
+
     private fun startSearch(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = retrofitController.getImages(requireContext(), query)
+            val result = retrofitController.getImages(query)
             val startPosition = imageList.size
             imageList.addAll(result)
 
