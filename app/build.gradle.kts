@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -7,6 +9,13 @@ android {
     namespace = "com.project.imagesearchingapp"
     compileSdk = 34
 
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").inputStream())
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.project.imagesearchingapp"
         minSdk = 32
@@ -15,6 +24,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField("String",
+            "KAKAO_API_KEY",
+            properties.getProperty("kakao_app_key")
+        )
+        buildConfigField("String",
+            "KAKAO_REST_KEY",
+            properties.getProperty("kakao_rest_key")
+        )
     }
 
     buildTypes {
@@ -45,7 +64,13 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.play.services.fitness)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    testImplementation(libs.kotlinx.coroutines.test)
 }

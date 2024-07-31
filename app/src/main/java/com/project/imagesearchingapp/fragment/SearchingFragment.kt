@@ -19,11 +19,19 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.project.imagesearchingapp.R
 import com.project.imagesearchingapp.data.ImageData
 import com.project.imagesearchingapp.databinding.FragmentSearchingBinding
+import com.project.imagesearchingapp.model.api.RetrofitController
+import com.project.imagesearchingapp.model.api.RetrofitService
 import com.project.imagesearchingapp.recycler_view.ImageRvAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchingFragment : Fragment() {
     private var _binding: FragmentSearchingBinding? = null
     private val binding get() = _binding!!
+
+    private val retrofitController = RetrofitController()
 
     private val imageList = mutableListOf<ImageData>(
 
@@ -33,8 +41,8 @@ class SearchingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "Daum카페", "2024-01-21 22:50:57"))
-        imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "네이퍼카페", "2024-01-22 22:50:57"))
+        //imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "Daum카페", "2024-01-21 22:50:57"))
+        //imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "네이퍼카페", "2024-01-22 22:50:57"))
     }
 
     override fun onCreateView(
@@ -68,12 +76,15 @@ class SearchingFragment : Fragment() {
             })
         }
 
+
+
         binding.searchEditText.setOnKeyListener { _, keyCode, event ->
             if((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 val imm = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
 
-                //TODO: when press a search button
+                val query = binding.searchEditText.text.toString()
+                startSearch(query)
             }
 
             true
@@ -81,7 +92,21 @@ class SearchingFragment : Fragment() {
         binding.searchBtn.setOnClickListener {
             val imm = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
-            //TODO: when press a search button
+
+            val query = binding.searchEditText.text.toString()
+            startSearch(query)
+        }
+    }
+
+    private fun startSearch(query: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = retrofitController.getImages(requireContext(), query)
+            val startPosition = imageList.size
+            imageList.addAll(result)
+
+            withContext(Dispatchers.Main) {
+                imageRvAdapter.notifyItemRangeInserted(startPosition, result.size)
+            }
         }
     }
 }
