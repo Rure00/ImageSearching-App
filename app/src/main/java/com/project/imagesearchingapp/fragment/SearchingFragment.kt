@@ -34,9 +34,7 @@ class SearchingFragment : Fragment() {
 
     private val retrofitController = RetrofitController()
 
-    private val imageList = mutableListOf<ImageData>(
-
-        )
+    private val imageList = mutableListOf<ImageData>()
     private val imageRvAdapter = ImageRvAdapter(imageList)
 
     override fun onCreateView(
@@ -97,11 +95,11 @@ class SearchingFragment : Fragment() {
     private fun startSearch(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val result = retrofitController.getImages(query)
-            val startPosition = imageList.size
+            imageList.clear()
             imageList.addAll(result)
 
             withContext(Dispatchers.Main) {
-                imageRvAdapter.notifyItemRangeInserted(startPosition, result.size)
+                imageRvAdapter.notifyItemRangeInserted(0, result.size)
             }
         }
     }
