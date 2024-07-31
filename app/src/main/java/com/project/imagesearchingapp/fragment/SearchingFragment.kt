@@ -1,6 +1,7 @@
 package com.project.imagesearchingapp.fragment
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
@@ -18,10 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.util.SharedPreferencesUtils
 import com.project.imagesearchingapp.MainActivity
 import com.project.imagesearchingapp.R
 import com.project.imagesearchingapp.data.ImageData
 import com.project.imagesearchingapp.databinding.FragmentSearchingBinding
+import com.project.imagesearchingapp.model.SharedPreferenceUtils
 import com.project.imagesearchingapp.model.api.RetrofitController
 import com.project.imagesearchingapp.model.api.RetrofitService
 import com.project.imagesearchingapp.recycler_view.ImageRvAdapter
@@ -35,6 +38,9 @@ class SearchingFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val retrofitController = RetrofitController()
+    private val preferencesUtils by lazy {
+        SharedPreferenceUtils(requireActivity())
+    }
 
     private val mainActivity by lazy {
         requireActivity() as MainActivity
@@ -81,6 +87,9 @@ class SearchingFragment : Fragment() {
             })
         }
 
+        val lastQuery = preferencesUtils.getLastQuery() ?: ""
+        binding.searchEditText.setText(lastQuery)
+        if (lastQuery.isNotBlank()) startSearch(lastQuery)
 
 
         binding.searchEditText.setOnKeyListener { _, keyCode, event ->
@@ -106,6 +115,7 @@ class SearchingFragment : Fragment() {
 
 
     private fun startSearch(query: String) {
+        preferencesUtils.saveQuery(query)
         CoroutineScope(Dispatchers.IO).launch {
             val result = retrofitController.getImages(query)
             imageList.clear()
