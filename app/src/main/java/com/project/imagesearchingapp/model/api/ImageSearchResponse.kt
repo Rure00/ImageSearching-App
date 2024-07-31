@@ -2,7 +2,7 @@ package com.project.imagesearchingapp.model.api
 
 data class ImageSearchResponse(
     val meta: Meta,
-    val document: Document
+    val documents: ArrayList<Document>
 ) {
     data class Meta(
         val total_count: Int,

@@ -6,10 +6,10 @@ import retrofit2.http.Query
 
 interface RetrofitService {
 
-    @GET("/search/image")
-    fun getImages(
+    @GET("search/image")
+    suspend fun getImages(
         @Query("query") query: String,
         @Query("size") size: Int = 80,
         @Query("page") page: Int = 1
-    )
+    ): ImageSearchResponse
 }

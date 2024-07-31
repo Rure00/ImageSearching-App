@@ -12,7 +12,7 @@ object RetrofitClient {
     private var instance: Retrofit? = null
     private val gson = GsonBuilder().setLenient().create()
 
-    private const val BASE_URL = "https://dapi.kakao.com/v2"
+    private const val BASE_URL = "https://dapi.kakao.com/v2/"
     private const val CONNECT_TIMEOUT_SEC = 20000L
 
     private const val KAKAO_APP_KEY = BuildConfig.KAKAO_API_KEY
