@@ -1,10 +1,12 @@
 package com.project.imagesearchingapp.fragment
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,9 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.util.SharedPreferencesUtils
+import com.project.imagesearchingapp.MainActivity
 import com.project.imagesearchingapp.R
 import com.project.imagesearchingapp.data.ImageData
 import com.project.imagesearchingapp.databinding.FragmentSearchingBinding
+import com.project.imagesearchingapp.model.SharedPreferenceUtils
 import com.project.imagesearchingapp.model.api.RetrofitController
 import com.project.imagesearchingapp.model.api.RetrofitService
 import com.project.imagesearchingapp.recycler_view.ImageRvAdapter
@@ -33,9 +38,23 @@ class SearchingFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val retrofitController = RetrofitController()
+    private val preferencesUtils by lazy {
+        SharedPreferenceUtils(requireActivity())
+    }
 
+    private val mainActivity by lazy {
+        requireActivity() as MainActivity
+    }
     private val imageList = mutableListOf<ImageData>()
-    private val imageRvAdapter = ImageRvAdapter(imageList)
+    private val imageRvAdapter = ImageRvAdapter(imageList, false) {
+        if(mainActivity.likedImages.contains(it)) {
+            mainActivity.likedImages.remove(it)
+        } else {
+            mainActivity.likedImages.add(it)
+        }
+
+        Log.d("Like", "insert size: ${mainActivity.likedImages.size}")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +69,7 @@ class SearchingFragment : Fragment() {
 
         binding.imageRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
-            adapter = imageRvAdapter.apply { notifyItemRangeInserted(0, imageList.size) }
+            adapter = imageRvAdapter
             addItemDecoration(object: ItemDecoration() {
                 val px = 10
                 val spanCount = 2
@@ -68,6 +87,9 @@ class SearchingFragment : Fragment() {
             })
         }
 
+        val lastQuery = preferencesUtils.getLastQuery() ?: ""
+        binding.searchEditText.setText(lastQuery)
+        if (lastQuery.isNotBlank()) startSearch(lastQuery)
 
 
         binding.searchEditText.setOnKeyListener { _, keyCode, event ->
@@ -93,6 +115,7 @@ class SearchingFragment : Fragment() {
 
 
     private fun startSearch(query: String) {
+        preferencesUtils.saveQuery(query)
         CoroutineScope(Dispatchers.IO).launch {
             val result = retrofitController.getImages(query)
             imageList.clear()
