@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction()
             .add(R.id.main_fragment_container, SearchingFragment()).commitNow()
+
         binding.searchingTabBtn.setOnClickListener {
             if(fragmentIndex == 0) return@setOnClickListener
             fragmentIndex = 0
