@@ -2,6 +2,7 @@ package com.project.imagesearchingapp.fragment
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.project.imagesearchingapp.MainActivity
 import com.project.imagesearchingapp.R
 import com.project.imagesearchingapp.data.ImageData
 import com.project.imagesearchingapp.databinding.FragmentMyArchiveBinding
@@ -19,8 +21,10 @@ class MyArchiveFragment : Fragment() {
     private var _binding: FragmentMyArchiveBinding? = null
     private val binding get() = _binding!!
 
-    private val imageList = mutableListOf<ImageData>()
-    private val imageRvAdapter = ImageRvAdapter(imageList)
+    private val mainActivity by lazy {
+        requireActivity() as MainActivity
+    }
+    private lateinit var imageRvAdapter: ImageRvAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,9 +37,16 @@ class MyArchiveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        imageRvAdapter = ImageRvAdapter(mainActivity.likedImages, true) {
+            val index = mainActivity.likedImages.indexOf(it)
+            mainActivity.likedImages.removeAt(index)
+            imageRvAdapter.notifyItemRemoved(index)
+        }
+
         binding.archiveRecyclerView.apply {
+            Log.d("Like", "size: ${mainActivity.likedImages.size}")
             layoutManager = GridLayoutManager(context, 2)
-            adapter = imageRvAdapter.apply { notifyItemRangeInserted(0, imageList.size) }
+            adapter = imageRvAdapter
             addItemDecoration(object: ItemDecoration() {
                 val px = 10
                 val spanCount = 2

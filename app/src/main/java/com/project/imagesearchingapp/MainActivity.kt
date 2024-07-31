@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.project.imagesearchingapp.data.ImageData
 import com.project.imagesearchingapp.databinding.ActivityMainBinding
 import com.project.imagesearchingapp.fragment.MyArchiveFragment
 import com.project.imagesearchingapp.fragment.SearchingFragment
@@ -14,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private var fragmentIndex = 0
+    val likedImages = mutableListOf<ImageData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
