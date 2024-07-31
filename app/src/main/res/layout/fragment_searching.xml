@@ -40,6 +40,7 @@
             android:inputType="text"
             android:autofillHints="@null"
             android:hint="@null"
+            android:maxLines="1"
             />
 
         <TextView
@@ -72,8 +73,6 @@
         app:layout_constraintTop_toBottomOf="@id/search_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
-
         >
 
     </androidx.recyclerview.widget.RecyclerView>

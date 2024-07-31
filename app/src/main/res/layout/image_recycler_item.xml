@@ -21,6 +21,23 @@
         android:scaleType="centerCrop"
         android:cropToPadding="true"
         />
+
+    <ImageView
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:src="@drawable/favorite"
+
+        android:layout_margin="10dp"
+        android:contentDescription="@null"
+        android:visibility="invisible"
+        />
+
+
     
     <TextView
         android:id="@+id/from_text"
