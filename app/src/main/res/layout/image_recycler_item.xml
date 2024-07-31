@@ -50,7 +50,7 @@
         android:layout_marginTop="10dp"
 
         android:text="Daum카페"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         />
     <TextView
@@ -61,10 +61,10 @@
         app:layout_constraintTop_toBottomOf="@id/from_text"
         app:layout_constraintStart_toStartOf="parent"
 
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
 
         android:text="2024-01-21 22:50:57"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         />
 

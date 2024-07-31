@@ -11,11 +11,11 @@ import com.project.imagesearchingapp.databinding.ImageRecyclerItemBinding
 
 class ImageRvAdapter(private val itemList: List<ImageData>): RecyclerView.Adapter<ImageRvAdapter.ImageViewHolder>() {
 
-    class ImageViewHolder(val binding: ImageRecyclerItemBinding): ViewHolder(binding.root) {
+
+    class ImageViewHolder(private val binding: ImageRecyclerItemBinding): ViewHolder(binding.root) {
         fun bind(item: ImageData) {
             with(binding) {
-                //TODO: Glide 이용
-                //  image = item.image
+                image.setImageBitmap(item.image)
                 fromText.text = item.from
                 timeText.text = item.time
             }
@@ -32,4 +32,6 @@ class ImageRvAdapter(private val itemList: List<ImageData>): RecyclerView.Adapte
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.bind(itemList[position])
     }
+
+
 }
