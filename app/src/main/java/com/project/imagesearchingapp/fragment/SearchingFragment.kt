@@ -1,6 +1,9 @@
 package com.project.imagesearchingapp.fragment
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
@@ -9,7 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.project.imagesearchingapp.R
 import com.project.imagesearchingapp.data.ImageData
 import com.project.imagesearchingapp.databinding.FragmentSearchingBinding
@@ -19,8 +25,17 @@ class SearchingFragment : Fragment() {
     private var _binding: FragmentSearchingBinding? = null
     private val binding get() = _binding!!
 
-    private val imageList = mutableListOf<ImageData>()
+    private val imageList = mutableListOf<ImageData>(
+
+        )
     private val imageRvAdapter = ImageRvAdapter(imageList)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "Daum카페", "2024-01-21 22:50:57"))
+        imageList.add(ImageData(BitmapFactory.decodeResource(resources, R.drawable.gwon), "네이퍼카페", "2024-01-22 22:50:57"))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +49,23 @@ class SearchingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.imageRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 2)
             adapter = imageRvAdapter.apply { notifyItemRangeInserted(0, imageList.size) }
+            addItemDecoration(object: ItemDecoration() {
+                val px = 10
+                val spanCount = 2
+
+                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                    val index = parent.getChildLayoutPosition(view)
+                    val isLeft = (index % spanCount == 0)
+                    outRect.set(
+                        if (isLeft) px else px/2,
+                        0,
+                        if (isLeft) px/2 else px,
+                        px
+                    )
+                }
+            })
         }
 
         binding.searchEditText.setOnKeyListener { _, keyCode, event ->
